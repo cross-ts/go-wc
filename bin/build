@@ -1,0 +1,4 @@
+#!/bin/sh
+
+docker build . -t go -q
+docker run -v `pwd`:/wc/ go go build .

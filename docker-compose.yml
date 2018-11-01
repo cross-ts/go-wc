@@ -4,4 +4,4 @@ services:
   wc:
     build: .
     volumes:
-      - .:/app
+      - .:/wc
