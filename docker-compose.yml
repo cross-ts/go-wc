@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  wc:
+    build: .
+    volumes:
+      - .:/app
