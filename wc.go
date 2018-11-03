@@ -6,21 +6,28 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 )
 
 func main() {
 	flag.Parse()
 
+	wg := sync.WaitGroup{}
 	for _, fileName := range flag.Args() {
-		file, err := os.Open(fileName)
-		defer file.Close()
-		if err != nil {
-			fmt.Printf("wc: %v: unknown file\n", fileName)
-			continue
-		}
-		line, word, size, name := wc(file)
-		fmt.Printf("%v %v %v %v\n", line, word, size, name)
+		wg.Add(1)
+		go func(fileName string) {
+			defer wg.Done()
+			file, err := os.Open(fileName)
+			defer file.Close()
+			if err != nil {
+				fmt.Printf("wc: %v: unknown file\n", fileName)
+				return
+			}
+			line, word, size, name := wc(file)
+			fmt.Printf("%v %v %v %v\n", line, word, size, name)
+		}(fileName)
 	}
+	wg.Wait()
 }
 
 func check(e error) {
