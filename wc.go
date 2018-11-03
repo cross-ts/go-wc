@@ -9,8 +9,23 @@ import (
 	"sync"
 )
 
-func main() {
+type Options struct {
+	c bool
+	m bool
+	l bool
+}
+
+var options = Options{c: false}
+
+func parse() {
+	flag.BoolVar(&options.c, "c", false, "print the byte counts")
+	flag.BoolVar(&options.m, "m", false, "print the character counts")
+	flag.BoolVar(&options.l, "l", false, "print the newline counts")
 	flag.Parse()
+}
+
+func main() {
+	parse()
 
 	wg := sync.WaitGroup{}
 	for _, fileName := range flag.Args() {
